@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, css } from "aphrodite";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +10,8 @@ import {
   faCode,
   faPlus,
   faCheckCircle,
-  faTimesCircle
+  faTimesCircle,
+  faSpinner
 } from "@fortawesome/free-solid-svg-icons";
 
 import ReactTooltip from "react-tooltip";
@@ -20,6 +21,7 @@ export const TreeControls = (props) => {
 
   const handleLoadUrl = () => {
     if (loadUrl) {
+      props.setIsLoadingJson(true);
       console.log(`loading URL: ${loadUrl}`);
       props.loadJsonFromURL(loadUrl);
     }
@@ -75,12 +77,32 @@ export const TreeControls = (props) => {
         <FontAwesomeIcon icon={faCode} fixedWidth />
       </button>
       <ReactTooltip id="toggleCodeView" effect="solid" place="bottom">
-        <span>Raw JSON</span>
+        <span>View Raw</span>
       </ReactTooltip>
-      <FontAwesomeIcon
-        className={validIconClass()}
-        icon={props.isValidJson ? faCheckCircle : faTimesCircle}
-      />
+      {props.isLoadingJson ? (
+        <FontAwesomeIcon icon={faSpinner} pulse fixedWidth color="#aaa" />
+      ) : (
+        <>
+          <FontAwesomeIcon
+            className={validIconClass()}
+            icon={props.isValidJson ? faCheckCircle : faTimesCircle}
+            data-tip
+            data-for="validationIcon"
+          />
+          <ReactTooltip
+            id="validationIcon"
+            type={props.isValidJson ? "success" : "error"}
+            effect="solid"
+            place="bottom"
+          >
+            {props.isValidJson ? (
+              <span>Valid JSON</span>
+            ) : (
+              <span>Invalid JSON</span>
+            )}
+          </ReactTooltip>
+        </>
+      )}
       <div className={css(styles.addJsonSection)}>
         <input
           type="text"
@@ -88,17 +110,23 @@ export const TreeControls = (props) => {
           placeholder="Load URL"
           onBlur={handleBlur}
         />
-        <button
-          data-tip
-          data-for="addJson"
-          className={css(styles.plusButton)}
-          onClick={handleLoadUrl}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
-        <ReactTooltip id="addJson" effect="solid" place="bottom">
-          <span>Add JSON</span>
-        </ReactTooltip>
+        {props.isLoadingJson ? (
+          <FontAwesomeIcon icon={faSpinner} pulse fixedWidth color="#aaa" />
+        ) : (
+          <>
+            <button
+              data-tip
+              data-for="addJson"
+              className={css(styles.plusButton)}
+              onClick={handleLoadUrl}
+            >
+              <FontAwesomeIcon icon={faPlus} fixedWidth />
+            </button>
+            <ReactTooltip id="addJson" effect="solid" place="bottom">
+              <span>Add JSON</span>
+            </ReactTooltip>
+          </>
+        )}
       </div>
     </div>
   );

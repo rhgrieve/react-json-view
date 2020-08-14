@@ -17,7 +17,8 @@ export const JsonView = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [expandAll, setExpandAll] = useState(false);
   const [showCodeView, setShowCodeView] = useState(false);
-  const [isValidJson, setIsValidJson] = useState(null);
+  const [isValidJson, setIsValidJson] = useState(true);
+  const [isLoadingJson, setIsLoadingJson] = useState(false);
 
   useEffect(() => {
     setExpandAll(true);
@@ -67,19 +68,28 @@ export const JsonView = (props) => {
       method: "post",
       body: url
     })
-      .then(async (res) => await res.json())
-      .then((json) => loadData(json));
+      .then(async (res) => {
+        console.info("Loading json...");
+        return await res.json();
+      })
+      .then((json) => {
+        if (validateJson(JSON.stringify(json))) {
+          setData(json);
+          console.info("json loaded");
+        } else {
+          console.log("could not validate json");
+        }
+        setIsLoadingJson(false);
+      });
   };
 
-  const loadData = (json) => {
-    console.log("Validating json...");
-    if (validateJson(JSON.stringify(json))) {
-      setData(json);
-      console.log("json set");
-    } else {
-      console.log("could not validate json");
-    }
-  };
+  // const loadData = (json) => {
+  //   if (validateJson(JSON.stringify(json))) {
+  //     setData(json);
+  //   } else {
+  //     console.log("could not validate json");
+  //   }
+  // };
 
   const toggleExpandAll = () => {
     setExpandAll((expandAll) => !expandAll);
@@ -100,7 +110,9 @@ export const JsonView = (props) => {
     showCodeView,
     toggleCodeView,
     loadJsonFromURL,
-    isValidJson
+    isValidJson,
+    isLoadingJson,
+    setIsLoadingJson
   };
 
   const treeProps = {
@@ -124,7 +136,9 @@ export const JsonView = (props) => {
           )}
         </div>
       ) : (
-        <p>Please enter valid JSON</p>
+        <div className={css(styles.message, styles.error)}>
+          <p>Please enter valid JSON</p>
+        </div>
       )}
     </>
   );
@@ -134,5 +148,15 @@ const styles = StyleSheet.create({
   prismView: {
     padding: "1em",
     fontFamily: "monospace"
+  },
+  message: {
+    padding: "1em",
+    borderRadius: "0.5em",
+    marginTop: "1em"
+  },
+  error: {
+    backgroundColor: "#E69595",
+    border: "1px solid #964B4B",
+    color: "#964B4B"
   }
 });
