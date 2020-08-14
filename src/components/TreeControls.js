@@ -19,9 +19,14 @@ export const TreeControls = (props) => {
     disabled: props.showCodeView
   };
 
+  const expandAllButtonProps = {
+    onClick: props.toggleExpandAll,
+    disabled: props.showCodeView
+  };
+
   return (
     <div className={css(styles.controls)}>
-      <button onClick={props.toggleExpandAll}>
+      <button {...expandAllButtonProps}>
         {props.expandAll ? (
           <FontAwesomeIcon icon={faMinusSquare} fixedWidth />
         ) : (
