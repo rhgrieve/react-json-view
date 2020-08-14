@@ -26,7 +26,11 @@ export const Tree = (props) => {
           );
         })
       ) : (
-        <TreeChild query={props.query} element={filtered} expand />
+        <TreeChild
+          query={props.query}
+          element={filtered}
+          expand={props.expandAll}
+        />
       )}
     </div>
   );

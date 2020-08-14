@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import uuid from "react-uuid";
 import { StyleSheet, css } from "aphrodite";
 
@@ -18,7 +18,11 @@ export const TreeChild = ({
   expand,
   query
 }) => {
-  const [expanded, setExpanded] = useState(expand);
+  const [expanded, setExpanded] = useState(true);
+
+  useEffect(() => {
+    setExpanded(expand);
+  }, [setExpanded, expand]);
 
   const handleExpandElement = () => {
     setExpanded((expanded) => !expanded);

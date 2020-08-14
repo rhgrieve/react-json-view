@@ -8,7 +8,7 @@ import { PrismView } from "./PrismView";
 import { filterObjectByKey } from "../utils/filter";
 
 export const JsonView = (props) => {
-  const data = props.data;
+  const [data, setData] = useState({});
   const options = {
     showControls: props.controls || true
   };
@@ -17,16 +17,7 @@ export const JsonView = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [expandAll, setExpandAll] = useState(false);
   const [showCodeView, setShowCodeView] = useState(false);
-
-  const toggleExpandAll = () => {
-    setExpandAll((expandAll) => !expandAll);
-  };
-
-  // comment
-
-  const toggleCodeView = () => {
-    setShowCodeView((showCodeView) => !showCodeView);
-  };
+  const [isValidJson, setIsValidJson] = useState(null);
 
   useEffect(() => {
     setExpandAll(true);
@@ -54,10 +45,49 @@ export const JsonView = (props) => {
     filterData(searchValue);
   }, [data, searchValue]);
 
-  // FOR CUSTOM INPUT FIELD
-  // const handleChange = (value) => {
-  //   setSearchValue(value);
-  // };
+  useEffect(() => {
+    if (validateJson(JSON.stringify(props.data))) {
+      setData(props.data);
+      setIsValidJson(true);
+    }
+  }, [props.data]);
+
+  const validateJson = (jsonString) => {
+    try {
+      JSON.parse(jsonString);
+    } catch (e) {
+      setIsValidJson(false);
+      return false;
+    }
+    return true;
+  };
+
+  const loadJsonFromURL = async (url) => {
+    await fetch("https://rough-glade-7b9a.alkmt.workers.dev", {
+      method: "post",
+      body: url
+    })
+      .then(async (res) => await res.json())
+      .then((json) => loadData(json));
+  };
+
+  const loadData = (json) => {
+    console.log("Validating json...");
+    if (validateJson(JSON.stringify(json))) {
+      setData(json);
+      console.log("json set");
+    } else {
+      console.log("could not validate json");
+    }
+  };
+
+  const toggleExpandAll = () => {
+    setExpandAll((expandAll) => !expandAll);
+  };
+
+  const toggleCodeView = () => {
+    setShowCodeView((showCodeView) => !showCodeView);
+  };
 
   const handleChange = (e) => {
     setSearchValue(e.target.value);
@@ -68,7 +98,9 @@ export const JsonView = (props) => {
     toggleExpandAll,
     expandAll,
     showCodeView,
-    toggleCodeView
+    toggleCodeView,
+    loadJsonFromURL,
+    isValidJson
   };
 
   const treeProps = {
@@ -78,17 +110,23 @@ export const JsonView = (props) => {
   };
 
   return (
-    <div>
+    <>
       {options.showControls && <TreeControls {...controlProps} />}
-      {showCodeView ? (
-        <PrismView
-          className={css(styles.prismView)}
-          code={JSON.stringify(data, null, 4)}
-        />
+      {isValidJson ? (
+        <div>
+          {showCodeView ? (
+            <PrismView
+              className={css(styles.prismView)}
+              code={JSON.stringify(data, null, 4)}
+            />
+          ) : (
+            <Tree {...treeProps} />
+          )}
+        </div>
       ) : (
-        <Tree {...treeProps} />
+        <p>Please enter valid JSON</p>
       )}
-    </div>
+    </>
   );
 };
 
