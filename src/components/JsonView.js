@@ -17,7 +17,10 @@ export const JsonView = (props) => {
   const [searchValue, setSearchValue] = useState("");
   const [expandAll, setExpandAll] = useState(false);
   const [showCodeView, setShowCodeView] = useState(false);
-  const [isValidJson, setIsValidJson] = useState(true);
+  const [isValidJson, setIsValidJson] = useState({
+    valid: true,
+    message: null
+  });
   const [isLoadingJson, setIsLoadingJson] = useState(false);
 
   useEffect(() => {
@@ -47,9 +50,11 @@ export const JsonView = (props) => {
   }, [data, searchValue]);
 
   useEffect(() => {
-    if (validateJson(JSON.stringify(props.data))) {
+    if (
+      props.data &&
+      validateJson(JSON.stringify(props.data).concat("asdfasdf...asdfasd"))
+    ) {
       setData(props.data);
-      setIsValidJson(true);
     }
   }, [props.data]);
 
@@ -57,9 +62,10 @@ export const JsonView = (props) => {
     try {
       JSON.parse(jsonString);
     } catch (e) {
-      setIsValidJson(false);
+      setIsValidJson({ valid: false, message: e.message });
       return false;
     }
+    setIsValidJson({ valid: true, message: null });
     return true;
   };
 
@@ -83,14 +89,6 @@ export const JsonView = (props) => {
       });
   };
 
-  // const loadData = (json) => {
-  //   if (validateJson(JSON.stringify(json))) {
-  //     setData(json);
-  //   } else {
-  //     console.log("could not validate json");
-  //   }
-  // };
-
   const toggleExpandAll = () => {
     setExpandAll((expandAll) => !expandAll);
   };
@@ -110,7 +108,7 @@ export const JsonView = (props) => {
     showCodeView,
     toggleCodeView,
     loadJsonFromURL,
-    isValidJson,
+    isValidJson: isValidJson.valid,
     isLoadingJson,
     setIsLoadingJson
   };
@@ -124,20 +122,28 @@ export const JsonView = (props) => {
   return (
     <>
       {options.showControls && <TreeControls {...controlProps} />}
-      {isValidJson ? (
-        <div>
-          {showCodeView ? (
-            <PrismView
-              className={css(styles.prismView)}
-              code={JSON.stringify(data, null, 4)}
-            />
+      {props.data ? (
+        <>
+          {isValidJson.valid ? (
+            <div>
+              {showCodeView ? (
+                <PrismView
+                  className={css(styles.prismView)}
+                  code={JSON.stringify(data, null, 4)}
+                />
+              ) : (
+                <Tree {...treeProps} />
+              )}
+            </div>
           ) : (
-            <Tree {...treeProps} />
+            <div className={css(styles.message, styles.error)}>
+              <p>Please enter valid JSON: {isValidJson.message}</p>
+            </div>
           )}
-        </div>
+        </>
       ) : (
-        <div className={css(styles.message, styles.error)}>
-          <p>Please enter valid JSON</p>
+        <div className={css(styles.message, styles.info)}>
+          <p>Add JSON to view</p>
         </div>
       )}
     </>
@@ -158,5 +164,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#E69595",
     border: "1px solid #964B4B",
     color: "#964B4B"
+  },
+  info: {
+    backgroundColor: "#A3D0F3",
+    border: "1px solid #386282",
+    color: "#386282"
   }
 });

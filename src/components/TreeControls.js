@@ -31,21 +31,33 @@ export const TreeControls = (props) => {
     setLoadUrl(e.target.value);
   };
 
+  const disableInput = props.showCodeView || !props.isValidJson;
+
   const inputProps = {
     className: css(styles.input),
     type: "text",
     placeholder: "filter",
     onChange: props.handleChange,
-    disabled: props.showCodeView
+    disabled: disableInput
   };
 
   const expandAllButtonProps = {
     onClick: props.toggleExpandAll,
-    disabled: props.showCodeView
+    disabled: disableInput
+  };
+
+  const codeViewButtonStyles = props.showCodeView
+    ? css(styles.codeButton, styles.active)
+    : css(styles.codeButton);
+
+  const showCodeViewButtonProps = {
+    className: codeViewButtonStyles,
+    onClick: props.toggleCodeView,
+    disabled: !props.isValidJson
   };
 
   const validIconClass = () => {
-    if (props.isValidJson === null) {
+    if (props.isValidJson === undefined) {
       return css(styles.iconGray);
     } else if (props.isValidJson) {
       return css(styles.iconValid);
@@ -64,16 +76,7 @@ export const TreeControls = (props) => {
         )}
       </button>
       <input {...inputProps} />
-      <button
-        data-tip
-        data-for="toggleCodeView"
-        className={
-          props.showCodeView
-            ? css(styles.codeButton, styles.active)
-            : css(styles.codeButton)
-        }
-        onClick={props.toggleCodeView}
-      >
+      <button data-tip data-for="toggleCodeView" {...showCodeViewButtonProps}>
         <FontAwesomeIcon icon={faCode} fixedWidth />
       </button>
       <ReactTooltip id="toggleCodeView" effect="solid" place="bottom">
