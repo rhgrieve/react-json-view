@@ -5,7 +5,7 @@ import { Tree } from "./Tree";
 import { TreeControls } from "./TreeControls";
 import { PrismView } from "./PrismView";
 
-import { filterObjectByKey, filterObjectByQuery } from "../utils/filter";
+import { filterObjectByKey } from "../utils/filter";
 
 export const JsonView = (props) => {
   const data = props.data;
@@ -36,7 +36,7 @@ export const JsonView = (props) => {
 
       if (openQueryRegex.test(q)) {
         if (closeQueryRegex.test(q)) {
-          filtered = filterObjectByQuery(q, data);
+          // filtered = filterObjectByQuery(q, data);
         } else {
           return;
         }
