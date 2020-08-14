@@ -16,12 +16,25 @@ export const TreeKeyValue = ({ objectKey, value, query }) => {
   //   alert("success!");
   // });
 
+  const valueStyle =
+    value === null
+      ? css(styles.value, styles.nullStyle)
+      : css(styles.value, styles[typeof value]);
+
+  const displayValue = (value) => {
+    if (value === null) {
+      return "null";
+    } else if (value === "") {
+      return '""';
+    } else {
+      return value.toString();
+    }
+  };
+
   return (
     <p className={css(styles.gray, styles.subelement)}>
       <TreeKey query={query} text={objectKey} />
-      <span className={css(styles.value, styles[typeof value])}>
-        {value.toString()}
-      </span>
+      <span className={valueStyle}>{displayValue(value)}</span>
     </p>
   );
 };
@@ -52,5 +65,8 @@ const styles = StyleSheet.create({
   },
   boolean: {
     color: "#e76f51"
+  },
+  nullStyle: {
+    color: "#aaa"
   }
 });

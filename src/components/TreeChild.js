@@ -29,16 +29,20 @@ export const TreeChild = ({
   };
 
   const itemLabel = (element, i) => {
-    if (Array.isArray(element)) {
-      return `${parent || "array"} [${element.length}]`;
-    } else if (
-      typeof element === "object" &&
-      !Array.isArray(element) &&
-      !rootElement
-    ) {
-      return `${parent || "object"} {${Object.keys(element).length}}`;
-    } else {
-      return `${i} {${Object.keys(element).length}}`;
+    try {
+      if (Array.isArray(element)) {
+        return `${parent || "array"} [${element.length}]`;
+      } else if (
+        typeof element === "object" &&
+        !Array.isArray(element) &&
+        !rootElement
+      ) {
+        return `${parent || "object"} {${Object.keys(element).length}}`;
+      } else {
+        return `${i} {${Object.keys(element).length}}`;
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -55,37 +59,40 @@ export const TreeChild = ({
         </button>
         <span className={css(styles.gray)}>{itemLabel(element, i)}</span>
       </div>
-      {Object.keys(element).map((subel, i) => {
-        return (
-          <div
-            key={uuid()}
-            className={
-              !expanded
-                ? css(styles.minimize, styles.element)
-                : css(styles.element)
-            }
-          >
-            <div className={css(styles.indent)}>
-              {typeof element[subel] !== "object" ? (
-                <TreeKeyValue
-                  query={query}
-                  objectKey={subel}
-                  value={element[subel]}
-                />
-              ) : (
-                <TreeChild
-                  title="List"
-                  query={query}
-                  index={i}
-                  parent={subel}
-                  element={element[subel]}
-                  expand={expand}
-                />
-              )}
+      {element &&
+        Object.keys(element).map((subel, i) => {
+          console.log(element[subel]);
+          return (
+            <div
+              key={uuid()}
+              className={
+                !expanded
+                  ? css(styles.minimize, styles.element)
+                  : css(styles.element)
+              }
+            >
+              <div className={css(styles.indent)}>
+                {typeof element[subel] !== "object" ||
+                element[subel] == null ? (
+                  <TreeKeyValue
+                    query={query}
+                    objectKey={subel}
+                    value={element[subel]}
+                  />
+                ) : (
+                  <TreeChild
+                    title="List"
+                    query={query}
+                    index={i}
+                    parent={subel}
+                    element={element[subel]}
+                    expand={expand}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 };
