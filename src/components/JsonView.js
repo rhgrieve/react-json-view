@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, css } from "aphrodite";
+import { Code } from "react-content-loader";
 
 import { Tree } from "./Tree";
 import { TreeControls } from "./TreeControls";
 import { PrismView } from "./PrismView";
 
 import { filterObjectByKey } from "../utils/filter";
+
+const Loader = () => <Code width="400" />;
 
 export const JsonView = (props) => {
   const [data, setData] = useState({});
@@ -124,24 +127,34 @@ export const JsonView = (props) => {
     <>
       {options.showControls && <TreeControls {...controlProps} />}
       {props.data ? (
-        <>
-          {isValidJson.valid ? (
+        <div className={css(styles.contentArea)}>
+          {isLoadingJson ? (
             <div>
-              {showCodeView ? (
-                <PrismView
-                  className={css(styles.prismView)}
-                  code={JSON.stringify(data, null, 4)}
-                />
-              ) : (
-                <Tree {...treeProps} />
-              )}
+              <Loader />
+              <Loader />
+              <Loader />
             </div>
           ) : (
-            <div className={css(styles.message, styles.error)}>
-              <p>Please enter valid JSON: {isValidJson.message}</p>
-            </div>
+            <>
+              {isValidJson.valid ? (
+                <div>
+                  {showCodeView ? (
+                    <PrismView
+                      className={css(styles.prismView)}
+                      code={JSON.stringify(data, null, 4)}
+                    />
+                  ) : (
+                    <Tree {...treeProps} />
+                  )}
+                </div>
+              ) : (
+                <div className={css(styles.message, styles.error)}>
+                  <p>Please enter valid JSON: {isValidJson.message}</p>
+                </div>
+              )}
+            </>
           )}
-        </>
+        </div>
       ) : (
         <div className={css(styles.message, styles.info)}>
           <p>Add JSON to view</p>
@@ -170,5 +183,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#A3D0F3",
     border: "1px solid #386282",
     color: "#386282"
+  },
+  contentArea: {
+    margin: "2em"
   }
 });
