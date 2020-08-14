@@ -8,16 +8,9 @@ import {
   faChevronDown
 } from "@fortawesome/free-solid-svg-icons";
 
-import { TreeKeyValue } from "./TreeKeyValue";
+import TreeKeyValue from "./TreeKeyValue";
 
-export const TreeChild = ({
-  parent,
-  rootElement,
-  element,
-  i,
-  expand,
-  query
-}) => {
+const TreeChild = ({ parent, rootElement, element, i, expand, query }) => {
   const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
@@ -61,7 +54,6 @@ export const TreeChild = ({
       </div>
       {element &&
         Object.keys(element).map((subel, i) => {
-          console.log(element[subel]);
           return (
             <div
               key={uuid()}
@@ -96,6 +88,8 @@ export const TreeChild = ({
     </div>
   );
 };
+
+export default React.memo(TreeChild);
 
 const styles = StyleSheet.create({
   minimize: {

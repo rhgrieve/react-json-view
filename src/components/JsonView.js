@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, css } from "aphrodite";
 import { Code } from "react-content-loader";
 
-import { Tree } from "./Tree";
+import Tree from "./Tree";
 import { TreeControls } from "./TreeControls";
 import { PrismView } from "./PrismView";
 
@@ -12,6 +12,7 @@ const Loader = () => <Code width="400" />;
 
 export const JsonView = (props) => {
   const [data, setData] = useState({});
+
   const options = {
     showControls: props.controls || true
   };
@@ -41,7 +42,10 @@ export const JsonView = (props) => {
           return;
         }
       } else {
+        // const t0 = performance.now();
         filtered = filterObjectByKey(q, data);
+        // const t1 = performance.now();
+        // console.log(`Call to filterObjectByKey took ${t1 - t0} milliseconds.`);
         // let filtered = data.map((f) => filterObjectByKey(q, f));
       }
 
@@ -129,15 +133,15 @@ export const JsonView = (props) => {
       {props.data ? (
         <div className={css(styles.contentArea)}>
           {isLoadingJson ? (
-            <div>
+            <>
               <Loader />
               <Loader />
               <Loader />
-            </div>
+            </>
           ) : (
             <>
               {isValidJson.valid ? (
-                <div>
+                <>
                   {showCodeView ? (
                     <PrismView
                       className={css(styles.prismView)}
@@ -146,7 +150,7 @@ export const JsonView = (props) => {
                   ) : (
                     <Tree {...treeProps} />
                   )}
-                </div>
+                </>
               ) : (
                 <div className={css(styles.message, styles.error)}>
                   <p>Please enter valid JSON: {isValidJson.message}</p>

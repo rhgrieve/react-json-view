@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import uuid from "react-uuid";
 
-import { TreeChild } from "./TreeChild";
+import TreeChild from "./TreeChild";
 
-export const Tree = (props) => {
-  const [filtered, setFiltered] = useState(props.data);
+const Tree = (props) => {
+  const [filtered, setFiltered] = useState({});
 
   useEffect(() => {
     setFiltered(props.data);
   }, [props.data]);
 
   return (
-    <div>
+    <>
       {Array.isArray(filtered) ? (
         filtered.map((el, i) => {
           return (
@@ -32,6 +32,8 @@ export const Tree = (props) => {
           expand={props.expandAll}
         />
       )}
-    </div>
+    </>
   );
 };
+
+export default React.memo(Tree);

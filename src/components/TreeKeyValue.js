@@ -1,21 +1,9 @@
 import React from "react";
 import { StyleSheet, css } from "aphrodite";
-// import Clipboard from "clipboard";
-
-// import { useAlert } from "react-alert";
 
 import { TreeKey } from "./TreeKey";
 
-export const TreeKeyValue = ({ objectKey, value, query }) => {
-  // const [copyText, setCopyText] = useState("");
-  // const alert = useAlert();
-
-  // var clipboard = new Clipboard(val.current);
-
-  // clipboard.on("success", (e) => {
-  //   alert("success!");
-  // });
-
+const TreeKeyValue = ({ objectKey, value, query }) => {
   const valueStyle =
     value === null
       ? css(styles.value, styles.nullStyle)
@@ -38,6 +26,8 @@ export const TreeKeyValue = ({ objectKey, value, query }) => {
     </p>
   );
 };
+
+export default React.memo(TreeKeyValue);
 
 const styles = StyleSheet.create({
   gray: {
