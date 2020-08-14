@@ -50,10 +50,7 @@ export const JsonView = (props) => {
   }, [data, searchValue]);
 
   useEffect(() => {
-    if (
-      props.data &&
-      validateJson(JSON.stringify(props.data).concat("asdfasdf...asdfasd"))
-    ) {
+    if (props.data && validateJson(JSON.stringify(props.data))) {
       setData(props.data);
     }
   }, [props.data]);
