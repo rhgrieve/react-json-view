@@ -67,23 +67,27 @@ export const JsonView = (props) => {
   };
 
   const loadJsonFromURL = async (url) => {
-    await fetch("https://rough-glade-7b9a.alkmt.workers.dev", {
-      method: "post",
-      body: url
-    })
-      .then(async (res) => {
-        console.info("Loading json...");
-        return await res.json();
+    try {
+      await fetch("https://rough-glade-7b9a.alkmt.workers.dev", {
+        method: "post",
+        body: url
       })
-      .then((json) => {
-        if (validateJson(JSON.stringify(json))) {
-          setData(json);
-          console.info("json loaded");
-        } else {
-          console.log("could not validate json");
-        }
-        setIsLoadingJson(false);
-      });
+        .then(async (res) => {
+          console.info("Loading json...");
+          return await res.json();
+        })
+        .then((json) => {
+          if (validateJson(JSON.stringify(json))) {
+            setData(json);
+            console.info("json loaded");
+          } else {
+            console.log("could not validate json");
+          }
+        });
+    } catch (e) {
+      console.warn("This doesn't look like a JSON document...");
+    }
+    setIsLoadingJson(false);
   };
 
   const toggleExpandAll = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { StyleSheet, css } from "aphrodite";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,9 +21,18 @@ export const TreeControls = (props) => {
 
   const handleLoadUrl = () => {
     if (loadUrl) {
-      props.setIsLoadingJson(true);
-      console.log(`loading URL: ${loadUrl}`);
-      props.loadJsonFromURL(loadUrl);
+      let url;
+      try {
+        url = new URL(loadUrl);
+      } catch (e) {
+        console.error("Please enter a valid URL");
+      }
+
+      if (url) {
+        props.setIsLoadingJson(true);
+        console.log(`loading URL: ${url.href}`);
+        props.loadJsonFromURL(url.href);
+      }
     }
   };
 
