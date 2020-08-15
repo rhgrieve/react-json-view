@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { StyleSheet, css } from "aphrodite";
 
-const TreeKey = ({ query, text }) => {
+export const TreeKey = ({ query, text }) => {
   const [prefix, suffix] = text.split(query);
 
   useEffect(() => {
@@ -34,7 +34,3 @@ const styles = StyleSheet.create({
     padding: "0.2em 0"
   }
 });
-
-// do the thing
-
-export default React.memo(TreeKey);
