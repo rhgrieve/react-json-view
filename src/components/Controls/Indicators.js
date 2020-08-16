@@ -9,7 +9,7 @@ import {
   faSpinner
 } from "@fortawesome/free-solid-svg-icons";
 
-export const ValidJsonIndicator = ({ isValidJson, isLoadingJson }) => {
+const ValidJsonIndicator = ({ isValidJson, isLoadingJson }) => {
   const validIconClass = () => {
     if (isValidJson === undefined) {
       return css(styles.iconGray);
@@ -47,39 +47,8 @@ export const ValidJsonIndicator = ({ isValidJson, isLoadingJson }) => {
 };
 
 const styles = StyleSheet.create({
-  controls: {
-    marginBottom: "1em"
-  },
-  input: {
-    border: "1px solid #aaaaaa",
-    padding: "0.5em",
-    margin: "0 1em",
-    borderRadius: "0.5em",
-    outline: "none"
-  },
-  codeButton: {
-    color: "#aaaaaa",
-    ":hover": {
-      color: "black"
-    },
-    margin: "0 1em 0 0"
-  },
-  addJsonSection: {
-    float: "right"
-  },
-  plusButton: {
-    color: "#C75FD9"
-  },
   iconGray: {
     color: "#aaaaaa"
-  },
-  expandSection: {
-    backgroundColor: "pink",
-    padding: "1em",
-    margin: "1em 0"
-  },
-  active: {
-    color: "black"
   },
   iconValid: {
     color: "#3A9830"
@@ -88,3 +57,7 @@ const styles = StyleSheet.create({
     color: "#C84730"
   }
 });
+
+export default React.memo(ValidJsonIndicator);
+
+//

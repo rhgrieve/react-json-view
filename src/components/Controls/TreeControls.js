@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { StyleSheet, css } from "aphrodite";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import ReactTooltip from "react-tooltip";
 
 import { ExpandAllButton, ToggleCodeViewButton } from "./Buttons";
-import { ValidJsonIndicator } from "./Indicators";
+import ValidJsonIndicator from "./Indicators";
+import AddJsonForm from "./AddJsonForm";
+import FilterInput from "./FilterInput";
 
 export const TreeControls = (props) => {
   const [loadUrl, setLoadUrl] = useState("");
 
   const handleLoadUrl = () => {
+    console.log(loadUrl);
     if (loadUrl) {
       let url;
       try {
@@ -28,35 +27,26 @@ export const TreeControls = (props) => {
     }
   };
 
-  const handleBlur = (e) => {
-    setLoadUrl(e.target.value);
-  };
-
   const disableInput = props.showCodeView || !props.isValidJson;
 
   const inputProps = {
-    className: css(styles.input),
-    type: "text",
     placeholder: "filter",
-    onChange: props.handleChange,
-    disabled: disableInput
+    showCodeView: props.showCodeView,
+    isValidJson: props.isValidJson,
+    setSearchValue: props.setSearchValue
   };
 
-  const codeViewButtonStyles = props.showCodeView
-    ? css(styles.codeButton, styles.active)
-    : css(styles.codeButton);
-
   const toggleCodeViewButtonProps = {
-    className: codeViewButtonStyles,
     onClick: props.toggleCodeView,
     disabled: !props.isValidJson
   };
 
   const expandAllButtonProps = {
     onClick: props.toggleExpandAll,
-    disabled: disableInput,
     expandAll: props.expandAll,
-    showCodeView: props.showCodeView
+    showCodeView: props.showCodeView,
+    isValidJson: props.isValidJson,
+    disableInput
   };
 
   const validJsonIndicatorProps = {
@@ -64,37 +54,19 @@ export const TreeControls = (props) => {
     isLoadingJson: props.isLoadingJson
   };
 
+  const addJsonFormProps = {
+    isLoadingJson: props.isLoadingJson,
+    handleLoadUrl,
+    setLoadUrl
+  };
+
   return (
     <div className={css(styles.controls)}>
       <ExpandAllButton {...expandAllButtonProps} />
-      <input {...inputProps} />
+      <FilterInput {...inputProps} />
       <ToggleCodeViewButton {...toggleCodeViewButtonProps} />
       <ValidJsonIndicator {...validJsonIndicatorProps} />
-      <div className={css(styles.addJsonSection)}>
-        <input
-          type="text"
-          className={css(styles.input)}
-          placeholder="Load URL"
-          onBlur={handleBlur}
-        />
-        {props.isLoadingJson ? (
-          <FontAwesomeIcon icon={faSpinner} pulse fixedWidth color="#aaa" />
-        ) : (
-          <>
-            <button
-              data-tip
-              data-for="addJson"
-              className={css(styles.plusButton)}
-              onClick={handleLoadUrl}
-            >
-              <FontAwesomeIcon icon={faPlus} fixedWidth />
-            </button>
-            <ReactTooltip id="addJson" effect="solid" place="bottom">
-              <span>Add JSON</span>
-            </ReactTooltip>
-          </>
-        )}
-      </div>
+      <AddJsonForm {...addJsonFormProps} />
     </div>
   );
 };
@@ -102,42 +74,7 @@ export const TreeControls = (props) => {
 const styles = StyleSheet.create({
   controls: {
     marginBottom: "1em"
-  },
-  input: {
-    border: "1px solid #aaaaaa",
-    padding: "0.5em",
-    margin: "0 1em",
-    borderRadius: "0.5em",
-    outline: "none"
-  },
-  codeButton: {
-    color: "#aaaaaa",
-    ":hover": {
-      color: "black"
-    },
-    margin: "0 1em 0 0"
-  },
-  addJsonSection: {
-    float: "right"
-  },
-  plusButton: {
-    color: "#C75FD9"
-  },
-  iconGray: {
-    color: "#aaaaaa"
-  },
-  expandSection: {
-    backgroundColor: "pink",
-    padding: "1em",
-    margin: "1em 0"
-  },
-  active: {
-    color: "black"
-  },
-  iconValid: {
-    color: "#3A9830"
-  },
-  iconInvalid: {
-    color: "#C84730"
   }
 });
+
+//

@@ -1,9 +1,21 @@
 import React from "react";
 import { StyleSheet, css } from "aphrodite";
 
-
-const FilterInput = ({ placeholder, onChange, showCodeView, isValidJson }) => {
+const FilterInput = ({
+  placeholder,
+  showCodeView,
+  isValidJson,
+  setSearchValue
+}) => {
   const disableInput = showCodeView || !isValidJson;
+
+  const onChange = (e) => {
+    const openQueryRegex = /^\{/;
+
+    if (!openQueryRegex.test(e.target.value)) {
+      setSearchValue(e.target.value);
+    }
+  };
 
   return (
     <input
@@ -26,4 +38,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FilterInput;
+export default React.memo(FilterInput);
+
+//

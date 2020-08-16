@@ -4,7 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import ReactTooltip from "react-tooltip";
 
-const AddJsonForm = ({ handleBlur, handleLoadUrl, isLoadingJson }) => {
+const AddJsonForm = ({ setLoadUrl, handleLoadUrl, isLoadingJson }) => {
+  const handleBlur = (e) => {
+    setLoadUrl(e.target.value);
+  };
+
   return (
     <div className={css(styles.addJsonSection)}>
       <input
@@ -51,4 +55,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default AddJsonForm;
+export default React.memo(AddJsonForm);
+
+//

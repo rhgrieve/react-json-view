@@ -9,9 +9,9 @@ import {
   faMinusSquare
 } from "@fortawesome/free-regular-svg-icons";
 
-export const ExpandAllButton = ({ onClick, disabled, expandAll }) => {
+export const ExpandAllButton = ({ onClick, expandAll, disableInput }) => {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <button onClick={onClick} disabled={disableInput}>
       {expandAll ? (
         <FontAwesomeIcon icon={faMinusSquare} fixedWidth />
       ) : (
@@ -21,7 +21,7 @@ export const ExpandAllButton = ({ onClick, disabled, expandAll }) => {
   );
 };
 
-export const ToggleCodeViewButton = ({ onClick, disabled, showCodeView }) => {
+export const ToggleCodeViewButton = ({ onClick, showCodeView }) => {
   const codeViewButtonStyles = showCodeView
     ? css(styles.codeButton, styles.active)
     : css(styles.codeButton);
@@ -44,16 +44,6 @@ export const ToggleCodeViewButton = ({ onClick, disabled, showCodeView }) => {
 };
 
 const styles = StyleSheet.create({
-  controls: {
-    marginBottom: "1em"
-  },
-  input: {
-    border: "1px solid #aaaaaa",
-    padding: "0.5em",
-    margin: "0 1em",
-    borderRadius: "0.5em",
-    outline: "none"
-  },
   codeButton: {
     color: "#aaaaaa",
     ":hover": {
@@ -61,27 +51,9 @@ const styles = StyleSheet.create({
     },
     margin: "0 1em 0 0"
   },
-  addJsonSection: {
-    float: "right"
-  },
-  plusButton: {
-    color: "#C75FD9"
-  },
-  iconGray: {
-    color: "#aaaaaa"
-  },
-  expandSection: {
-    backgroundColor: "pink",
-    padding: "1em",
-    margin: "1em 0"
-  },
   active: {
     color: "black"
-  },
-  iconValid: {
-    color: "#3A9830"
-  },
-  iconInvalid: {
-    color: "#C84730"
   }
 });
+
+//
