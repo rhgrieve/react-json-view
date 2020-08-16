@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.css";
 
 import { JsonView } from "./components/JsonView";
-import { mockJson } from "./data/mock";
+import { mockJson } from "./data/objectData";
 
 const jsonViewOptions = {
   controls: true
