@@ -14,7 +14,7 @@ const AddJsonForm = ({ setLoadUrl, handleLoadUrl, isLoadingJson }) => {
       <input
         type="text"
         className={css(styles.input)}
-        placeholder="Load URL"
+        placeholder="Load from URL"
         onBlur={handleBlur}
       />
       {isLoadingJson ? (
@@ -47,14 +47,18 @@ const styles = StyleSheet.create({
     outline: "none"
   },
   addJsonSection: {
-    float: "right"
+    float: "right",
+    verticalAlign: "center"
   },
   plusButton: {
-    color: "#C75FD9",
-    marginTop: "0.5em"
+    color: "#AAA",
+    marginTop: "0.5em",
+    ":hover": {
+      color: "#C75FD9"
+    }
   }
 });
 
 export default React.memo(AddJsonForm);
 
-//
+////

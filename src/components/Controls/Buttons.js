@@ -47,13 +47,13 @@ const styles = StyleSheet.create({
   codeButton: {
     color: "#aaaaaa",
     ":hover": {
-      color: "black"
+      color: "#4590B5"
     },
     margin: "0 1em 0 0"
   },
   active: {
-    color: "black"
+    color: "#4590B5"
   }
 });
 
-//
+////
