@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import uuid from "react-uuid";
 import { StyleSheet, css } from "aphrodite";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,34 +8,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import TreeKeyValue from "./TreeKeyValue";
+import ItemLabel from "./ItemLabel";
 
 const TreeChild = ({ parent, rootElement, element, i, expand, query }) => {
   const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     setExpanded(expand);
-  }, [setExpanded, expand]);
+  }, [expand]);
 
   const handleExpandElement = () => {
     setExpanded((expanded) => !expanded);
   };
 
-  const itemLabel = (element, i) => {
-    try {
-      if (Array.isArray(element)) {
-        return `${parent || "array"} [${element.length}]`;
-      } else if (
-        typeof element === "object" &&
-        !Array.isArray(element) &&
-        !rootElement
-      ) {
-        return `${parent || "object"} {${Object.keys(element).length}}`;
-      } else {
-        return `${i} {${Object.keys(element).length}}`;
-      }
-    } catch (e) {
-      console.error(e);
-    }
+  const itemLabelProps = {
+    element,
+    i,
+    rootElement,
+    parent,
+    query
   };
 
   return (
@@ -50,13 +40,16 @@ const TreeChild = ({ parent, rootElement, element, i, expand, query }) => {
             size="xs"
           />
         </button>
-        <span className={css(styles.gray)}>{itemLabel(element, i)}</span>
+        <span className={css(styles.gray)}>
+          <ItemLabel {...itemLabelProps} />
+          {/* {itemLabel(element, i, rootElement, parent)} */}
+        </span>
       </div>
       {element &&
         Object.keys(element).map((subel, i) => {
           return (
             <div
-              key={uuid()}
+              key={i}
               className={
                 !expanded
                   ? css(styles.minimize, styles.element)
@@ -109,3 +102,5 @@ const styles = StyleSheet.create({
     color: "#495057"
   }
 });
+
+//

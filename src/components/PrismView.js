@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, css } from "aphrodite";
 import Highlight, { defaultProps } from "prism-react-renderer";
 
-export const PrismView = ({ code }) => {
+const PrismView = ({ code }) => {
   return (
     <Highlight {...defaultProps} code={code} language="json">
       {({ style, tokens, getLineProps, getTokenProps }) => (
@@ -28,3 +28,7 @@ const styles = StyleSheet.create({
     borderRadius: "1em"
   }
 });
+
+export default React.memo(PrismView);
+
+//

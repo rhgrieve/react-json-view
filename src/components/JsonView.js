@@ -3,8 +3,8 @@ import { StyleSheet, css } from "aphrodite";
 import { Code } from "react-content-loader";
 
 import Tree from "./Tree";
-import { TreeControls } from "./TreeControls";
-import { PrismView } from "./PrismView";
+import { TreeControls } from "./Controls/TreeControls";
+import PrismView from "./PrismView";
 
 import { filterObjectByKey } from "../utils/filter";
 
@@ -28,12 +28,12 @@ export const JsonView = (props) => {
   const [isLoadingJson, setIsLoadingJson] = useState(false);
 
   useEffect(() => {
-    setExpandAll(true);
-
     const filterData = (q) => {
       const openQueryRegex = /^\{/;
       const closeQueryRegex = /^\{[a-zA-Z1-9]*.[a-zA-Z1-9]*\}$/;
       let filtered;
+
+      setExpandAll(true);
 
       if (openQueryRegex.test(q)) {
         if (closeQueryRegex.test(q)) {
@@ -42,17 +42,11 @@ export const JsonView = (props) => {
           return;
         }
       } else {
-        // const t0 = performance.now();
         filtered = filterObjectByKey(q, data);
-        // const t1 = performance.now();
-        // console.log(`Call to filterObjectByKey took ${t1 - t0} milliseconds.`);
-        // let filtered = data.map((f) => filterObjectByKey(q, f));
       }
 
-      // let filtered = data.map((f) => filterObjectByQuery(q, f));
       setFiltered(filtered);
     };
-
     filterData(searchValue);
   }, [data, searchValue]);
 
@@ -105,12 +99,8 @@ export const JsonView = (props) => {
     setShowCodeView((showCodeView) => !showCodeView);
   };
 
-  const handleChange = (e) => {
-    setSearchValue(e.target.value);
-  };
-
   const controlProps = {
-    handleChange,
+    setSearchValue,
     toggleExpandAll,
     expandAll,
     showCodeView,
@@ -124,7 +114,8 @@ export const JsonView = (props) => {
   const treeProps = {
     data: filtered,
     expandAll,
-    query: searchValue
+    query: searchValue,
+    style: { display: showCodeView ? "none" : null }
   };
 
   return (
@@ -133,23 +124,22 @@ export const JsonView = (props) => {
       {props.data ? (
         <div className={css(styles.contentArea)}>
           {isLoadingJson ? (
-            <>
+            <div className={css(styles.contentLoader)}>
               <Loader />
               <Loader />
               <Loader />
-            </>
+            </div>
           ) : (
             <>
               {isValidJson.valid ? (
                 <>
-                  {showCodeView ? (
+                  <Tree {...treeProps} />
+                  <div style={{ display: showCodeView ? null : "none" }}>
                     <PrismView
                       className={css(styles.prismView)}
                       code={JSON.stringify(data, null, 4)}
                     />
-                  ) : (
-                    <Tree {...treeProps} />
-                  )}
+                  </div>
                 </>
               ) : (
                 <div className={css(styles.message, styles.error)}>
@@ -190,5 +180,10 @@ const styles = StyleSheet.create({
   },
   contentArea: {
     margin: "2em"
+  },
+  contentLoader: {
+    width: "450px"
   }
 });
+
+//

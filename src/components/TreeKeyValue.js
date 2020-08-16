@@ -1,23 +1,14 @@
 import React from "react";
 import { StyleSheet, css } from "aphrodite";
 
-import { TreeKey } from "./TreeKey";
+import TreeKey from "./TreeKey";
+import displayValue from "../utils/displayValue";
 
 const TreeKeyValue = ({ objectKey, value, query }) => {
   const valueStyle =
     value === null
       ? css(styles.value, styles.nullStyle)
       : css(styles.value, styles[typeof value]);
-
-  const displayValue = (value) => {
-    if (value === null) {
-      return "null";
-    } else if (value === "") {
-      return '""';
-    } else {
-      return value.toString();
-    }
-  };
 
   return (
     <p className={css(styles.gray, styles.subelement)}>
@@ -59,4 +50,14 @@ const styles = StyleSheet.create({
   nullStyle: {
     color: "#aaa"
   }
+  // bold: {
+  //   fontWeight: "bold",
+  //   backgroundColor: "#FEF9B8",
+  //   borderRadius: "0.2em"
+  // },
+  // spacing: {
+  //   padding: "0.2em 0"
+  // }
 });
+
+//

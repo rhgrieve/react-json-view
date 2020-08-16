@@ -1,21 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StyleSheet, css } from "aphrodite";
 
-export const TreeKey = ({ query, text }) => {
-  const [prefix, suffix] = text.split(query);
+import HighlightQuery from "./HighlightQuery";
 
-  useEffect(() => {
-    // console.log("rendering key");
-  }, []);
-
+const TreeKey = ({ query, text }) => {
   return (
     <span className={css(styles.spacing)}>
-      {text.includes(query) && query !== "" ? (
+      {text.toLowerCase().includes(query.toLowerCase()) && query !== "" ? (
         <>
-          {prefix}
-          <span className={css(styles.bold)}>{query}</span>
-          {suffix}
-          :&nbsp;
+          <HighlightQuery query={query}>{text}</HighlightQuery>:&nbsp;
         </>
       ) : (
         <>{text}:&nbsp;</>
@@ -23,6 +16,8 @@ export const TreeKey = ({ query, text }) => {
     </span>
   );
 };
+
+export default React.memo(TreeKey);
 
 const styles = StyleSheet.create({
   bold: {
@@ -34,3 +29,5 @@ const styles = StyleSheet.create({
     padding: "0.2em 0"
   }
 });
+
+//
