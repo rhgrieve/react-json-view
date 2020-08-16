@@ -130,6 +130,10 @@ table {
 
 /* ======= APP STYLES ============ */
 
+html {
+  overflow-y: scroll;
+}
+
 .App {
   font-family: sans-serif;
   padding: 2em;
