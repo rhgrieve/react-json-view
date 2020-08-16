@@ -11,7 +11,7 @@ const TreeKeyValue = ({ objectKey, value, query }) => {
       : css(styles.value, styles[typeof value]);
 
   return (
-    <p className={css(styles.gray, styles.subelement)}>
+    <p className={css(styles.gray)}>
       <TreeKey query={query} text={objectKey} />
       <span className={valueStyle}>{displayValue(value)}</span>
     </p>
@@ -24,13 +24,9 @@ const styles = StyleSheet.create({
   gray: {
     color: "#495057"
   },
-  subelement: {
-    // display: "inline-block"
-    // padding: "0.2em 0.5em"
-  },
   value: {
     borderRadius: "0.5em",
-    padding: "0.2em",
+    padding: "0.2em 0",
     width: "auto",
     cursor: "pointer",
     ":hover": {
