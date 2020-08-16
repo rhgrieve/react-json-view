@@ -89,14 +89,16 @@ const styles = StyleSheet.create({
     display: "none"
   },
   element: {
-    padding: "0.2em 0",
-    marginLeft: "-1em"
+    margin: "0.2em 0 0 -0.5em"
+    // padding: "0.2em 0",
+    // marginLeft: "-1em"
   },
   indent: {
     marginLeft: "3em"
   },
   tree: {
-    fontFamily: "monospace"
+    fontFamily: "monospace",
+    borderLeft: "1px dotted #E6D6EB"
   },
   gray: {
     color: "#495057"

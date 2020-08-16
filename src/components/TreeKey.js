@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     borderRadius: "0.2em"
   },
   spacing: {
-    padding: "0.2em 0"
+    // padding: "0.2em 0"
   }
 });
 
