@@ -2,27 +2,28 @@ import React from "react";
 import { StyleSheet, css } from "aphrodite";
 
 import HighlightQuery from "./HighlightQuery";
-
+//
 const itemLabel = (element, i, rootElement, parent) => {
+  const childIsArray = Array.isArray(element);
+  const childIsObjectLiteral =
+    typeof element === "object" && !childIsArray && !rootElement;
+  const numChildren = Object.keys(element).length;
+
   try {
-    if (Array.isArray(element)) {
+    if (childIsArray) {
       return {
         text: parent || "array",
         decorator: `[${element.length}]`
       };
-    } else if (
-      typeof element === "object" &&
-      !Array.isArray(element) &&
-      !rootElement
-    ) {
+    } else if (childIsObjectLiteral) {
       return {
         text: parent || "object",
-        decorator: `{${Object.keys(element).length}}`
+        decorator: `{${numChildren}}`
       };
     } else {
       return {
         text: `${i}` || "object",
-        decorator: `{${Object.keys(element).length}}`
+        decorator: `{${numChildren}}`
       };
     }
   } catch (e) {
